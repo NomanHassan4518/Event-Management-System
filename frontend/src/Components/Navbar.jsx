@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import { useAuth } from "../Context/AuthContext";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { auth, setAuth } = useAuth();
+  
+
+  const handleLogout = () => {
+    setAuth(null);
+    navigate("/");
+  };
 
   const isEventPage =
     location.pathname !== "/" && !location.pathname.startsWith("/sign");
@@ -52,24 +61,39 @@ const Navbar = () => {
       </div>
 
       <div className="hidden md:flex space-x-5 text-sm">
-        <Link
-          to="/signin"
-          className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
-        >
-          Sign In
-        </Link>
-        <Link
-          to="/signup"
-          className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
-        >
-          Sign Up
-        </Link>
+        {auth ? (
+          <button
+            onClick={handleLogout}
+            className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
+          >
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link
+              to="/signin"
+              className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
+            >
+              Sign In
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
       </div>
 
       <div className="md:hidden">
         <Button
           type="text"
-          icon={<MenuOutlined className={isEventPage ? "text-white" : "text-pink-600"} />}
+          icon={
+            <MenuOutlined
+              className={isEventPage ? "text-white" : "text-pink-600"}
+            />
+          }
           onClick={() => setOpen(true)}
         />
       </div>
@@ -100,20 +124,29 @@ const Navbar = () => {
             </Link>
           ))}
 
-          <Link
-            to="/signin"
-            onClick={() => setOpen(false)}
-            className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
-          >
-            Sign In
-          </Link>
-          <Link
-            to="/signup"
-            onClick={() => setOpen(false)}
-            className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
-          >
-            Sign Up
-          </Link>
+          {auth ? (
+            <button
+              onClick={handleLogout}
+              className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
+            ></button>
+          ) : (
+            <>
+              <Link
+                to="/signin"
+                onClick={() => setOpen(false)}
+                className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setOpen(false)}
+                className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </Drawer>
     </div>

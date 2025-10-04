@@ -41,7 +41,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://event-management-system-z1ji.vercel.app//api/auth/register",
+        "https://event-management-system-z1ji.vercel.app/api/auth/register",
         {
           name: formData.name,
           email: formData.email,
