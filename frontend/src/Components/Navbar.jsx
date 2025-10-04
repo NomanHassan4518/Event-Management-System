@@ -9,11 +9,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { auth, setAuth } = useAuth();
-  
-console.log(auth);
 
   const handleLogout = () => {
     setAuth(null);
+    localStorage.removeItem("user"); // Remove auth from localStorage
     navigate("/");
   };
 
@@ -24,8 +23,12 @@ console.log(auth);
     { to: "/", label: "Home" },
     { to: "/events", label: "Events" },
     { to: "/my-registration", label: "My Registration" },
-    { to: "/admin", label: "Admin Panel" },
   ];
+
+  // Add admin panel link if user is admin
+  if (auth && auth.isAdmin) {
+    navLinks.push({ to: "/admin", label: "Admin Panel" });
+  }
 
   return (
     <div
@@ -42,7 +45,6 @@ console.log(auth);
                 : "https://demo.egenslab.com/html/eventlab/assets/images/logo.png"
             }
             alt="Event Logo"
-            className=""
           />
         </Link>
       </div>
@@ -105,7 +107,6 @@ console.log(auth);
             <img
               src="https://demo.egenslab.com/html/eventlab/assets/images/logo.png"
               alt="logo"
-              className=""
             />
           </Link>
         }
@@ -127,9 +128,14 @@ console.log(auth);
 
           {auth ? (
             <button
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                setOpen(false);
+              }}
               className="bg-pink-600 hover:bg-pink-800 text-white text-center py-2 rounded"
-            ></button>
+            >
+              Logout
+            </button>
           ) : (
             <>
               <Link

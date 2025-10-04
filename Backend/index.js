@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import speakerRoutes from "./src/routes/speakerRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -18,10 +19,8 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
+app.use("/api/speaker", speakerRoutes);
 
-app.get("/", (req, res) => {
-  res.send("api is working");
-});
 
 const port = process.env.PORT;
 app.listen(port, () => {
