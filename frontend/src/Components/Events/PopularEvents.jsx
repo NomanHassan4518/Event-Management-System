@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { events } from "../../assets/events";
-import EventCard from "../EventCard";
+import EventCard from "./EventCard";
 
 const PopularEvents = ({ showAll = false }) => {
   const [selectedCategory, setSelectedCategory] = useState("Business");

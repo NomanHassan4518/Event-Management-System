@@ -3,28 +3,34 @@ import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
-  console.log(location);
+  const isEventPage =
+    location.pathname !== "/" && !location.pathname.startsWith("/sign")
 
   return (
     <div className="absolute w-full flex items-center justify-between py-4 px-8 z-50">
       <div>
-        {location.pathname === "/events" ? (
-          <img
-            src="https://demo.egenslab.com/html/eventlab/assets/images/logo-v2.png"
-            alt=""
-          />
+        {isEventPage ? (
+          <Link to="/">
+            <img
+              src="https://demo.egenslab.com/html/eventlab/assets/images/logo-v2.png"
+              alt="Event Logo"
+            />
+          </Link>
         ) : (
-          <img
-            src="https://demo.egenslab.com/html/eventlab/assets/images/logo.png"
-            alt=""
-          />
+          <Link to="/">
+            <img
+              src="https://demo.egenslab.com/html/eventlab/assets/images/logo.png"
+              alt="Main Logo"
+            />
+          </Link>
         )}
       </div>
-      <div className="space-x-7 text-sm">
+
+      <div className="space-x-7 text-sm font-medium">
         <Link
           to="/"
           className={`${
-            location.pathname === "/events" ? "text-white" : "text-pink-600"
+            isEventPage ? "text-white" : "text-pink-600"
           } hover:text-pink-800`}
         >
           Home
@@ -32,35 +38,42 @@ const Navbar = () => {
         <Link
           to="/events"
           className={`${
-            location.pathname === "/events" ? "text-white" : "text-pink-600"
+            isEventPage ? "text-white" : "text-pink-600"
           } hover:text-pink-800`}
         >
           Events
         </Link>
         <Link
-          to=""
+          to="/my-registration"
           className={`${
-            location.pathname === "/events" ? "text-white" : "text-pink-600"
+            isEventPage ? "text-white" : "text-pink-600"
           } hover:text-pink-800`}
         >
           My Registration
         </Link>
         <Link
-          to=""
+          to="/admin"
           className={`${
-            location.pathname === "/events" ? "text-white" : "text-pink-600"
+            isEventPage ? "text-white" : "text-pink-600"
           } hover:text-pink-800`}
         >
           Admin Panel
         </Link>
       </div>
+
       <div className="space-x-5 text-sm">
-        <button className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded">
+        <Link
+          to="/signin"
+          className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
+        >
           Sign In
-        </button>
-        <button className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded">
+        </Link>
+        <Link
+          to="/signup"
+          className="bg-pink-600 hover:bg-pink-800 text-white py-1 px-4 rounded"
+        >
           Sign Up
-        </button>
+        </Link>
       </div>
     </div>
   );

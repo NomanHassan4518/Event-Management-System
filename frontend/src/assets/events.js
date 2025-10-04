@@ -365,3 +365,57 @@ export const events = [
     "link": "/events/36"
   }
 ]
+
+
+export const speakers = [
+  {
+    id: 1,
+    name: "John Carter",
+    title: "Senior Visual Designer",
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&h=400&fit=crop",
+  },
+ 
+  {
+    id: 3,
+    name: "David Kim",
+    title: "AI Researcher",
+    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
+  },
+  {
+    id: 4,
+    name: "Emily Smith",
+    title: "Event Organizer",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop",
+  },
+  {
+    id: 5,
+    name: "Michael Brown",
+    title: "Web Developer",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+  },
+  {
+    id: 6,
+    name: "Olivia Johnson",
+    title: "UI/UX Designer",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+  },
+  {
+    id: 7,
+    name: "James Wilson",
+    title: "Tech Speaker",
+    image: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=400&h=400&fit=crop",
+  },
+  {
+    id: 8,
+    name: "Isabella Martinez",
+    title: "Digital Marketer",
+    image: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=400&h=400&fit=crop",
+  },
+ 
+  {
+    id: 10,
+    name: "Sophia Adams",
+    title: "Business Consultant",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop",
+  },
+];
