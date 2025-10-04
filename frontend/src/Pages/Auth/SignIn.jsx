@@ -1,20 +1,63 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useLoading } from "../../Context/LoadingContext";
+import { useAuth } from "../../Context/AuthContext";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const { setLoading } = useLoading();
+  const { setAuth } = useAuth();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const auth = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (auth) {
+      navigate("/events");
+    }
+  }, [auth, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("SignIn Data:", formData);
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        "https://event-management-system-z1ji.vercel.app/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      const data = response.data;
+
+      if (data.message === "Login successfully") {
+        toast.success(data.message);
+        setAuth(data);
+        navigate("/events");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Login failed!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
