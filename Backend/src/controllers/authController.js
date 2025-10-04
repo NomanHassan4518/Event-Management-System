@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       return res.status(409).json({ message: "User already exit" });
     }
 
-    let isAdmin = email === "malikhassanu55@gmail.com";
+    let isAdmin = email === "malikhassanhu55@gmail.com";
     const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({

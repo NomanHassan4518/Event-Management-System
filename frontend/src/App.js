@@ -1,5 +1,5 @@
-import {BrowserRouter,Routes,Route} from "react-router-dom"
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
 import Home from "./Pages/Home";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
@@ -9,26 +9,47 @@ import MyRegistration from "./Pages/registeredEvents";
 import AdminPanel from "./Pages/AdminPanel";
 import AddEventForm from "./Components/Admin/AddEventForm";
 import EditEventForm from "./Components/Admin/EditEventForm";
-import SignUp from "./Components/Auth/SignUp";
-import SignIn from "./Components/Auth/SignIn";
+import SignUp from "./Pages/Auth/SignUp";
+import SignIn from "./Pages/Auth/SignIn";
+import Spinner from "./Components/Spinner";
+import { LoadingProvider, useLoading } from "./Context/LoadingContext";
+import { AuthProvider } from "./Context/AuthContext";
+
+const SpinnerWrapper = () => {
+  const { loading } = useLoading();
+  return loading ? <Spinner /> : null;
+};
+
+function AppContent() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/event/:id" element={<EventDetail />} />
+        <Route path="/my-registration" element={<MyRegistration />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="//addEvent" element={<AddEventForm />} />
+        <Route path="/editEvent/:id" element={<EditEventForm />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+      </Routes>
+      <Footer />
+      <SpinnerWrapper />
+    </>
+  );
+}
 
 function App() {
   return (
-   <BrowserRouter>
-   <Navbar/>
-   <Routes>
-    <Route path="/" element={<Home/>}/>
-    <Route path="/events" element={<Events/>}/>
-    <Route path="/event/:id" element={<EventDetail/>}/>
-    <Route path="/my-registration" element={<MyRegistration/>}/>
-    <Route path="/admin" element={<AdminPanel/>}/>
-    <Route path="//addEvent" element={<AddEventForm/>}/>
-    <Route path="/editEvent/:id" element={<EditEventForm/>}/>
-    <Route path="/signup" element={<SignUp/>}/>
-    <Route path="/signin" element={<SignIn/>}/>
-   </Routes>
-   <Footer/>
-   </BrowserRouter>
+    <LoadingProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </AuthProvider>
+    </LoadingProvider>
   );
 }
 
