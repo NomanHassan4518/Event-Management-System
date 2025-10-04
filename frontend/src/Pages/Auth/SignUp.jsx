@@ -1,7 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useLoading } from "../../Context/LoadingContext";
+import { useAuth } from "../../Context/AuthContext";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { setLoading } = useLoading();
+  const { setAuth } = useAuth();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,18 +18,52 @@ const SignUp = () => {
     confirmPassword: "",
   });
 
+  const auth = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    if (auth) {
+      navigate("/events");
+    }
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
-    console.log("SignUp Data:", formData);
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "https://event-management-system-z1ji.vercel.app//api/auth/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      const data = response.data;
+
+      if (data.message === "User register successfully") {
+        toast.success(data.message);
+        setAuth(data);
+        navigate("/events");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Signup failed!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +124,10 @@ const SignUp = () => {
 
         <p className="text-sm text-gray-600 mt-6 text-center">
           Already have an account?{" "}
-          <Link to="/signin" className="text-[#ce1446] font-medium hover:underline">
+          <Link
+            to="/signin"
+            className="text-[#ce1446] font-medium hover:underline"
+          >
             Login
           </Link>
         </p>

@@ -14,6 +14,7 @@ import SignIn from "./Pages/Auth/SignIn";
 import Spinner from "./Components/Spinner";
 import { LoadingProvider, useLoading } from "./Context/LoadingContext";
 import { AuthProvider } from "./Context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 const SpinnerWrapper = () => {
   const { loading } = useLoading();
@@ -49,6 +50,7 @@ function App() {
           <AppContent />
         </BrowserRouter>
       </AuthProvider>
+        <ToastContainer position="top-right" />
     </LoadingProvider>
   );
 }
