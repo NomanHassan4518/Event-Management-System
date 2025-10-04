@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
+    "antd": "^5.27.4",
     "react": "^19.2.0",
     "react-alice-carousel": "^2.9.1",
     "react-dom": "^19.2.0",
