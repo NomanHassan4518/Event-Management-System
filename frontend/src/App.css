@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+body{
+  font-family: sans-serif;
+}
+
+
+.font-alice {
+  font-family: 'Alice', serif;
+}
