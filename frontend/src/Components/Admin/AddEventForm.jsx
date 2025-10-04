@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useLoading } from "../../Context/LoadingContext";
+import axios from "axios";
 
 const AddEventForm = () => {
+  const [speakers, setSpeakers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     desc: "",
@@ -14,8 +17,30 @@ const AddEventForm = () => {
     sponsor: "",
   });
 
+  const { setLoading } = useLoading();
+
+ useEffect(() => {
+  const fetchSpeakers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://event-management-system-z1ji.vercel.app/api/speaker"
+      );
+      console.log(response);
+      setSpeakers(response.data);
+    } catch (error) {
+      console.error("Error fetching speakers:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchSpeakers();
+}, []); // runs once on mount
+
+
   const categories = ["Business", "Technology", "Marketing", "Design"];
-  const speakers = ["John Smith", "Emma Johnson", "Sophia Lee"];
+  // const speakers = ["John Smith", "Emma Johnson", "Sophia Lee"];
   const sponsors = ["Event Lab", "Tech Corp"];
 
   const handleChange = (e) => {
@@ -160,40 +185,37 @@ const AddEventForm = () => {
           </div>
 
           <div className="grid grid-cols-2">
-          <div className="w-full h-full flex items-center ">
-            
-            <div className="flex flex-wrap gap-3">
-              {speakers.map((speaker, idx) => (
-                <label
-                  key={idx}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.speakers.includes(speaker)}
-                    onChange={() => toggleSpeaker(speaker)}
-                  />
-                  <span>{speaker}</span>
-                </label>
-              ))}
+            <div className="w-full h-full flex items-center ">
+              <div className="flex flex-wrap gap-3">
+                {speakers?.map((speaker, idx) => (
+                  <label
+                    key={idx}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.speakers.includes(speaker)}
+                      onChange={() => toggleSpeaker(speaker)}
+                    />
+                    <span>{speaker}</span>
+                  </label>
+                ))}
+              </div>
             </div>
+            <select
+              name="sponsor"
+              value={formData.sponsor}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ce1446] outline-none"
+            >
+              <option value="">Select Sponsor</option>
+              {sponsors.map((sponsor, idx) => (
+                <option key={idx} value={sponsor}>
+                  {sponsor}
+                </option>
+              ))}
+            </select>
           </div>
-             <select
-            name="sponsor"
-            value={formData.sponsor}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ce1446] outline-none"
-          >
-            <option value="">Select Sponsor</option>
-            {sponsors.map((sponsor, idx) => (
-              <option key={idx} value={sponsor}>
-                {sponsor}
-              </option>
-            ))}
-          </select>
-          </div>
-
-         
 
           <button
             type="submit"

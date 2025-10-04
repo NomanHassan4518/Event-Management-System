@@ -1,8 +1,52 @@
 import { Speaker } from "../models/speaker.js";
 
 export const createSpeaker = async (req, res) => {
+ const speakers = [
+  {
+    name: "John Carter",
+    title: "Senior Visual Designer",
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&h=400&fit=crop",
+  },
+  {
+    name: "David Kim",
+    title: "AI Researcher",
+    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
+  },
+  {
+    name: "Emily Smith",
+    title: "Event Organizer",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop",
+  },
+  {
+    name: "Michael Brown",
+    title: "Web Developer",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+  },
+  {
+    name: "Olivia Johnson",
+    title: "UI/UX Designer",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+  },
+  {
+    name: "James Wilson",
+    title: "Tech Speaker",
+    image: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=400&h=400&fit=crop",
+  },
+  {
+    name: "Isabella Martinez",
+    title: "Digital Marketer",
+    image: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=400&h=400&fit=crop",
+  },
+  {
+    name: "Sophia Adams",
+    title: "Business Consultant",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop",
+  },
+];
+
   try {
     const { name, title, image, events } = req.body;
+    await Speaker.insertMany(speakers)
     const speaker = await Speaker.create({ name, title, image, events });
     res.status(201).json(speaker);
   } catch (error) {
