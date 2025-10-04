@@ -31,6 +31,7 @@ export const register = async (req, res) => {
       name: newUser.name,
       email: newUser.email,
       token: generateToken(newUser._id),
+      isAdmin: newUser.isAdmin,
       message: "User registered successfully",
     });
   } catch (error) {
@@ -59,6 +60,7 @@ export const login = async (req, res) => {
       name: user.name,
       email: user.email,
       token: generateToken(user._id),
+      isAdmin: user.isAdmin,
       message: "Login successfully",
     });
   } catch (error) {

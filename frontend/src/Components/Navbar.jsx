@@ -10,6 +10,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { auth, setAuth } = useAuth();
   
+console.log(auth);
 
   const handleLogout = () => {
     setAuth(null);
