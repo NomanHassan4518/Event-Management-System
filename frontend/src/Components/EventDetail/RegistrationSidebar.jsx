@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { FaBookmark } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useLoading } from "../../Context/LoadingContext";
 
 const RegistrationSidebar = ({ eventId }) => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const { setLoading } = useLoading();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,16 +34,19 @@ const RegistrationSidebar = ({ eventId }) => {
         seatsBooked: Number(formData.seatsBooked),
       };
 
-      console.log("Submitting:", payload);
-
-      await axios.post(
+      setLoading(true);
+      const res = await axios.post(
         "https://event-management-system-z1ji.vercel.app/api/registration",
         payload
       );
-      toast.success("Event booked successfully");
+      const data = res.data;
+      toast.success(data.message);
+      navigate("/my-registration");
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Failed to book event");
+    } finally {
+      setLoading(false);
     }
   };
 

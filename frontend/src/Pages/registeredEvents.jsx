@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaCalendarAlt, FaUsers } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,7 +8,6 @@ import { useLoading } from "../Context/LoadingContext";
 const MyRegistration = () => {
   const [registeredEvents, setRegisteredEvents] = useState([]);
   const { setLoading } = useLoading();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRegisteredEvents = async () => {
@@ -21,7 +20,6 @@ const MyRegistration = () => {
           `https://event-management-system-z1ji.vercel.app/api/registration/${storedUser.id}`
         );
         setRegisteredEvents(data);
-        navigate("/my-registration");
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch your registrations");
@@ -31,7 +29,7 @@ const MyRegistration = () => {
     };
 
     fetchRegisteredEvents();
-  }, [setLoading, navigate]);
+  }, [setLoading]);
 
   return (
     <div>
@@ -62,7 +60,7 @@ const MyRegistration = () => {
 
       <div className="px-4 sm:px-8 md:px-16 py-8">
         {registeredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {registeredEvents.map((reg) => (
               <div
                 key={reg._id}
