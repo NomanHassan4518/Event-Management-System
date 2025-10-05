@@ -17,6 +17,7 @@ import { AuthProvider } from "./Context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import axios from "axios";
+import ScrollToTop from "./Components/ScrollToTop";
 
 const SpinnerWrapper = () => {
   const { loading } = useLoading();
@@ -83,6 +84,7 @@ function App() {
     <LoadingProvider>
       <AuthProvider>
         <BrowserRouter>
+        <ScrollToTop/>
           <AppContent />
         </BrowserRouter>
       </AuthProvider>

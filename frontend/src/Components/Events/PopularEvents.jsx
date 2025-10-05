@@ -6,9 +6,9 @@ const PopularEvents = ({ showAll = false }) => {
 
   const events = JSON.parse(localStorage.getItem("events"))
 
-const categories = [...new Set(events.map(event => event.category))];
+const categories = [...new Set(events?.map(event => event.category))];
 
-  let filteredEvents = events.filter(
+  let filteredEvents = events?.filter(
     (event) => event.category === selectedCategory
   );
 
