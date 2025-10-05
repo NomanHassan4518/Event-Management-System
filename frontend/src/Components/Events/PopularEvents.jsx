@@ -4,15 +4,14 @@ import EventCard from "./EventCard";
 const PopularEvents = ({ showAll = false }) => {
   const [selectedCategory, setSelectedCategory] = useState("Business");
 
-  const events = JSON.parse(localStorage.getItem("events"))
+  const events = JSON.parse(localStorage.getItem("events")) || [];
 
-const categories = [...new Set(events?.map(event => event.category))];
+  const categories = [...new Set(events.map(event => event.category))];
 
-  let filteredEvents = events?.filter(
+  let filteredEvents = events.filter(
     (event) => event.category === selectedCategory
   );
 
-  // If not showAll (home), limit to 6
   if (!showAll) {
     filteredEvents = filteredEvents.slice(0, 6);
   }
@@ -48,7 +47,7 @@ const categories = [...new Set(events?.map(event => event.category))];
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
-          {filteredEvents.length > 0 ? (
+          {(filteredEvents || []).length > 0 ? (
             filteredEvents.map((event, idx) => (
               <EventCard key={idx} event={event} />
             ))
