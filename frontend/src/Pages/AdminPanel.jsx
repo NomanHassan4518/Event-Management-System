@@ -1,9 +1,9 @@
 import React from 'react'
-import { events } from '../assets/events'
 import AdminHeader from '../Components/Admin/AdminHeader'
 import AdminEvents from '../Components/Admin/AdminEvents'
 
 const AdminPanel = () => {
+  const events = JSON.parse(localStorage.getItem("events"))
   return (
     <div>
       <AdminHeader/>

@@ -1,20 +1,42 @@
 import React from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const AdminEvents = ({ events, onDelete }) => {
+const AdminEvents = ({ events }) => {
   const categories = [...new Set(events.map((event) => event.category))];
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const onEdit = (event)=>{
-navigate(`/editEvent/${event.id}`,{state:{event}})
+  const onEdit = (event) => {
+    navigate(`/editEvent/${event._id}`, { state: { event } });
+  };
+
+  const onDelete = async (id) => {
+  try {
+    const res = await fetch(`https://event-management-system-z1ji.vercel.app/api/event/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      toast.success("Event deleted successfully");
+      // remove event from UI
+      window.location.reload(); 
+    } else {
+      toast.error("Failed to delete event");
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error("Error deleting event");
   }
+};
+
+
   return (
     <div className="p-8 font-alice">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl  font-semibold text-gray-800">Manage Events</h2>
         <Link
-         to="/addEvent"
+          to="/addEvent"
           className="flex items-center gap-2 bg-[#ce1446] text-white px-4 py-2 rounded-lg shadow hover:bg-[#a01034] transition"
         >
           <FaPlus /> Add New Event
@@ -23,7 +45,9 @@ navigate(`/editEvent/${event.id}`,{state:{event}})
 
       {categories.map((category) => (
         <div key={category} className="mb-10">
-          <h3 className="text-xl font-bold text-[#ce1446] mb-4 underline">{category}</h3>
+          <h3 className="text-xl font-bold text-[#ce1446] mb-4 underline">
+            {category}
+          </h3>
           <div className="overflow-x-auto bg-white rounded-xl shadow">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -39,7 +63,7 @@ navigate(`/editEvent/${event.id}`,{state:{event}})
                   .filter((event) => event.category === category)
                   .map((event) => (
                     <tr
-                      key={event.id}
+                      key={event._id}
                       className="border-t hover:bg-gray-50 transition text-center"
                     >
                       <td className="py-3 px-4">
@@ -52,7 +76,13 @@ navigate(`/editEvent/${event.id}`,{state:{event}})
                       <td className="py-3 px-4 font-medium text-gray-800">
                         {event.title}
                       </td>
-                      <td className="py-3 px-4 text-gray-600">{event.date}</td>
+                      <td className="py-3 px-4 text-gray-600">
+                        {new Date(event.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </td>
                       <td className="py-3 px-4 text-center flex gap-2 justify-center">
                         <button
                           onClick={() => onEdit(event)}
@@ -61,7 +91,7 @@ navigate(`/editEvent/${event.id}`,{state:{event}})
                           <FaEdit /> Edit
                         </button>
                         <button
-                          onClick={() => onDelete(event.id)}
+                          onClick={() => onDelete(event._id)}
                           className="flex items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition"
                         >
                           <FaTrash /> Delete

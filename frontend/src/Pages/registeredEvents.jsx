@@ -1,36 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaCalendarAlt, FaUsers } from "react-icons/fa";
-
-// Dummy registered events (replace with API call or props later)
-const registeredEvents = [
-  {
-    id: 1,
-    title: "AI & Web Development Bootcamp",
-    date: "Nov 10, 2025",
-    seats: 180,
-    image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=500&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Digital Marketing Expo",
-    date: "Dec 5, 2025",
-    seats: 300,
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=500&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Digital Marketing Expo",
-    date: "Dec 5, 2025",
-    seats: 300,
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=500&fit=crop",
-  },
-];
+import axios from "axios";
+import { toast } from "react-toastify";
+import {useLoading} from "../Context/LoadingContext"
 
 const MyRegistration = () => {
+  const [registeredEvents, setRegisteredEvents] = useState([]);
+  const {setLoading} = useLoading()
+
+ useEffect(() => {
+  const fetchRegisteredEvents = async () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser?.id) return;
+
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://event-management-system-z1ji.vercel.app/api/registration/${storedUser.id}`
+      );
+      setRegisteredEvents(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch your registrations");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRegisteredEvents();
+}, [setLoading]);
+
+
+
   return (
     <div>
       <div
@@ -59,36 +61,39 @@ const MyRegistration = () => {
       <div className="p-16">
         {registeredEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {registeredEvents.map((event) => (
+            {registeredEvents.map((reg) => (
               <div
-                key={event.id}
+                key={reg._id}
                 className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition"
               >
                 <img
-                  src={event.image}
-                  alt={event.title}
+                  src={reg.eventId?.image}
+                  alt={reg.eventId?.title}
                   className="w-full h-56 object-cover"
                 />
 
                 <div className="p-6">
                   <h3 className="text-xl font-bold truncate text-[#2d373c] font-alice">
-                    {event.title}
+                    {reg.eventId?.title}
                   </h3>
+
                   <div className="flex items-center gap-6 text-gray-500 text-sm mt-3">
                     <span className="flex items-center gap-2">
-                      <FaCalendarAlt className="text-[#ce1446]" /> {event.date}
+                      <FaCalendarAlt className="text-[#ce1446]" />{" "}
+                      {new Date(reg.eventId?.date).toLocaleDateString()}
                     </span>
                     <span className="flex items-center gap-2">
-                      <FaUsers className="text-[#ce1446]" /> {event.seats} seats
+                      <FaUsers className="text-[#ce1446]" />{" "}
+                      {reg.seatsBooked} seats
                     </span>
                   </div>
 
-                  <Link
-                    to={`/event/${event.id}`}
+                  {/* <Link
+                    to={`/event/${reg.eventId?._id}`}
                     className="inline-block mt-5 bg-[#ce1446] text-white px-6 py-2 rounded-md hover:bg-[#a61139] transition"
                   >
                     View Details
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             ))}

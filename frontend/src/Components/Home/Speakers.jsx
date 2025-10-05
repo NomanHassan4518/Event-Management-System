@@ -1,7 +1,6 @@
 import React from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
-import { speakers } from "../../assets/events";
 
 const responsive = {
   0: { items: 1 },
@@ -10,6 +9,7 @@ const responsive = {
 };
 
 const Speakers = () => {
+  const speakers = JSON.parse(localStorage.getItem("speakers"))
   const items = speakers.map((speaker) => (
     <div key={speaker.id} className="!mx-3">
       <img

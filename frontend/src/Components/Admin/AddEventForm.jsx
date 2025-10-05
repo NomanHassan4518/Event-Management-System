@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoading } from "../../Context/LoadingContext";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddEventForm = () => {
-  const [speakers, setSpeakers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     desc: "",
@@ -18,63 +19,69 @@ const AddEventForm = () => {
   });
 
   const { setLoading } = useLoading();
+  const navigate = useNavigate();
 
- useEffect(() => {
-  const fetchSpeakers = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        "https://event-management-system-z1ji.vercel.app/api/speaker"
-      );
-      console.log(response);
-      setSpeakers(response.data);
-    } catch (error) {
-      console.error("Error fetching speakers:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchSpeakers();
-}, []); // runs once on mount
-
-
-  const categories = ["Business", "Technology", "Marketing", "Design"];
-  // const speakers = ["John Smith", "Emma Johnson", "Sophia Lee"];
+  const categories = ["Business", "Technology", "Marketing", "Sport"];
   const sponsors = ["Event Lab", "Tech Corp"];
+  const speakers = JSON.parse(localStorage.getItem("speakers"));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const toggleSpeaker = (speaker) => {
+  const toggleSpeaker = (speakerId) => {
     setFormData((prev) => ({
       ...prev,
-      speakers: prev.speakers.includes(speaker)
-        ? prev.speakers.filter((s) => s !== speaker)
-        : [...prev.speakers, speaker],
+      speakers: prev.speakers.includes(speakerId)
+        ? prev.speakers.filter((id) => id !== speakerId)
+        : [...prev.speakers, speakerId],
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    setFormData({
-      title: "",
-      desc: "",
-      image: "",
-      date: "",
-      seats: "",
-      location: "",
-      category: "",
-      speakers: [],
-      sponsor: "",
-    });
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        "https://event-management-system-z1ji.vercel.app/api/event",
+        formData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      toast.success("Event add successfully!");
+      console.log(response.data);
+
+      setFormData({
+        title: "",
+        desc: "",
+        image: "",
+        date: "",
+        seats: "",
+        location: "",
+        category: "",
+        speakers: [],
+        sponsor: "",
+      });
+
+      navigate("/events");
+    } catch (error) {
+      console.error(
+        "Error creating event:",
+        error.response?.data || error.message
+      );
+      alert(error.response?.data?.message || "Failed to create event.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="">
+    <div>
+      {/* Header Section */}
       <div
         className="relative w-full h-[300px] flex items-end"
         style={{
@@ -101,6 +108,7 @@ const AddEventForm = () => {
         </div>
       </div>
 
+      {/* Form Section */}
       <div className="mt-5 px-12 pb-20">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Add New Event
@@ -184,24 +192,25 @@ const AddEventForm = () => {
             </select>
           </div>
 
-          <div className="grid grid-cols-2">
-            <div className="w-full h-full flex items-center ">
-              <div className="flex flex-wrap gap-3">
-                {speakers?.map((speaker, idx) => (
-                  <label
-                    key={idx}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.speakers.includes(speaker)}
-                      onChange={() => toggleSpeaker(speaker)}
-                    />
-                    <span>{speaker}</span>
-                  </label>
-                ))}
-              </div>
+          {/* Speaker selection */}
+          <div className="grid grid-cols-1 space-y-3">
+            <div className="flex flex-wrap gap-3">
+              {speakers?.map((speaker) => (
+                <label
+                  key={speaker._id}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.speakers.includes(speaker._id)}
+                    onChange={() => toggleSpeaker(speaker._id)}
+                  />
+                  <span>{speaker.name}</span>
+                </label>
+              ))}
             </div>
+
+            {/* Sponsor select */}
             <select
               name="sponsor"
               value={formData.sponsor}

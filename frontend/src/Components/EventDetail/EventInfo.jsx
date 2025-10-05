@@ -21,7 +21,13 @@ const EventInfo = ({ event }) => {
       <div className="flex items-center justify-between  text-sm px-6 py-4 border-b text-[#2d373c] font-semibold">
         <div className="flex items-center gap-2">
           <AiOutlineCalendar className=" text-lg" />
-          <span>{event.date || "October 13, 2025"}</span>
+           <span>
+            {new Date(event.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
         </div>
         <div className="flex items-center gap-2 text-[#ce1446]">
           <AiOutlineTeam className=" text-lg" />
@@ -52,7 +58,7 @@ const EventInfo = ({ event }) => {
           </div>
           <div>
             <p className="font-semibold text-gray-800">Speaker</p>
-            <span className="text-gray-500 text-xs">10 Best Speaker</span>
+            <span className="text-gray-500 text-xs">{event.speakers.length} Best Speaker</span>
           </div>
         </div>
 
@@ -62,7 +68,7 @@ const EventInfo = ({ event }) => {
           </div>
           <div>
             <p className="font-semibold text-gray-800">Sponsor</p>
-            <span className="text-gray-500 text-xs">Event Lab</span>
+            <span className="text-gray-500 text-xs">{event.sponsor}</span>
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import { BsDiagram3, BsCalendar2Week, BsGeoAlt } from "react-icons/bs";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EventCard = ({ event }) => {
   const navigate = useNavigate();
   const handleNavigate = () => {
-    navigate(`/event/${event.id}`, { state: { event } });
+    navigate(`/event/${event._id}`, { state: { event } });
   };
 
   return (
@@ -27,13 +27,19 @@ const EventCard = ({ event }) => {
       <div className="py-5 px-2  space-y-3">
         <div className="flex items-center gap-2 text-xs font-semibold">
           <BsCalendar2Week className="text-[#ce1446]" />{" "}
-          <span>{event.date}</span>
+          <span>
+            {new Date(event.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold">
           <BsGeoAlt className="text-[#ce1446]" /> <span>{event.location}</span>
         </div>
 
-        <h5 className="text-lg text-start font-alice font-semibold text-[#2d373c]">
+        <h5 className="text-lg text-start font-alice font-semibold text-[#2d373c] truncate">
           {event.title}{" "}
         </h5>
 

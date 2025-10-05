@@ -14,11 +14,11 @@ const Detail = () => {
     <div className="p-16 grid grid-cols-12 gap-6">
       <div className="col-span-8 font-alice">
         <EventInfo event={event}/>
-        <MainSpeakers/>
+        <MainSpeakers speakers={event.speakers}/>
       </div>
 
       <div className="col-span-4 ">
-       <RegistrationSidebar/>
+       <RegistrationSidebar eventId={event._id}/>
        <RecentEvents/>
       </div>
     </div>

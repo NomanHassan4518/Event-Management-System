@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import { events } from "../../assets/events";
 import EventCard from "./EventCard";
 
 const PopularEvents = ({ showAll = false }) => {
   const [selectedCategory, setSelectedCategory] = useState("Business");
 
-  const categories = [
-    "Business",
-    "Fire Wall",
-    "Sport",
-    "Web Development",
-    "Marketing",
-    "Technology",
-  ];
+  const events = JSON.parse(localStorage.getItem("events"))
+
+const categories = [...new Set(events.map(event => event.category))];
 
   let filteredEvents = events.filter(
     (event) => event.category === selectedCategory

@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post("/", createSpeaker);
-router.get("/", getSpeakers);
+router.get("/get", getSpeakers);
 router.get("/:id", getSpeakerById);
 router.put("/:id", updateSpeaker);
 router.delete("/:id", deleteSpeaker);

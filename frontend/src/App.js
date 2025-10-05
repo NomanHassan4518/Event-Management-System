@@ -15,6 +15,8 @@ import Spinner from "./Components/Spinner";
 import { LoadingProvider, useLoading } from "./Context/LoadingContext";
 import { AuthProvider } from "./Context/AuthContext";
 import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
+import axios from "axios";
 
 const SpinnerWrapper = () => {
   const { loading } = useLoading();
@@ -22,6 +24,40 @@ const SpinnerWrapper = () => {
 };
 
 function AppContent() {
+  const { setLoading } = useLoading();
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get("https://event-management-system-z1ji.vercel.app/api/event");
+        localStorage.setItem("events", JSON.stringify(res.data));
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [setLoading]);
+
+  useEffect(() => {
+    const fetchSpeakers = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "https://event-management-system-z1ji.vercel.app/api/speaker/get"
+        );
+        localStorage.setItem("speakers", JSON.stringify(response.data));
+      } catch (error) {
+        console.error("Error fetching speakers:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpeakers();
+  }, [setLoading]);
   return (
     <>
       <Navbar />
@@ -50,7 +86,7 @@ function App() {
           <AppContent />
         </BrowserRouter>
       </AuthProvider>
-        <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" />
     </LoadingProvider>
   );
 }

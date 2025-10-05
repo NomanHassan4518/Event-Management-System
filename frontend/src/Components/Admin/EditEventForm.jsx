@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useLoading } from "../../Context/LoadingContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditEventForm = () => {
   const [formData, setFormData] = useState({
@@ -14,12 +18,15 @@ const EditEventForm = () => {
     sponsor: "",
   });
 
-  const location = useLocation()
-  const event = location.state.event
+  const location = useLocation();
+  const navigate = useNavigate();
+  let { setLoading } = useLoading();
+  const event = location.state?.event;
+  const events = JSON.parse(localStorage.getItem("events"));
 
-  const categories = ["Business", "Technology", "Marketing", "Design"];
-  const speakers = ["John Smith", "Emma Johnson", "Sophia Lee"];
-  const sponsors = ["Event Lab", "Tech Corp"];
+  const categories = ["Business", "Technology", "Marketing", "Sport"];
+  const speakers = JSON.parse(localStorage.getItem("speakers")) || [];
+  const sponsors = [...new Set(events.map((event) => event.sponsor))];
 
   useEffect(() => {
     if (event) {
@@ -27,7 +34,9 @@ const EditEventForm = () => {
         title: event.title || "",
         desc: event.desc || "",
         image: event.image || "",
-        date: event.date || "",
+        date: event.date
+          ? new Date(event.date).toISOString().split("T")[0]
+          : "",
         seats: event.seats || "",
         location: event.location || "",
         category: event.category || "",
@@ -45,18 +54,31 @@ const EditEventForm = () => {
   const toggleSpeaker = (speaker) => {
     setFormData((prev) => ({
       ...prev,
-      speakers: prev.speakers.includes(speaker)
-        ? prev.speakers.filter((s) => s !== speaker)
+      speakers: prev.speakers.find((s) => s._id === speaker._id)
+        ? prev.speakers.filter((s) => s._id !== speaker._id)
         : [...prev.speakers, speaker],
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      setLoading(true);
+      await axios.put(`https://event-management-system-z1ji.vercel.app/api/event/${event._id}`, formData);
+      toast.succes("Event edit successfully!");
+      navigate("/events");
+    } catch (error) {
+      console.error("Error updating event:", error);
+      alert("Failed to update event");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="">
+    <div className="pb-12">
+      {/* Header */}
       <div
         className="relative w-full h-[300px] flex items-end"
         style={{
@@ -83,11 +105,13 @@ const EditEventForm = () => {
         </div>
       </div>
 
+      {/* Form */}
       <div className="mt-5 px-12">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Edit Event
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Title */}
           <input
             type="text"
             name="title"
@@ -98,6 +122,7 @@ const EditEventForm = () => {
             required
           />
 
+          {/* Description */}
           <textarea
             name="desc"
             value={formData.desc}
@@ -108,6 +133,7 @@ const EditEventForm = () => {
             required
           />
 
+          {/* Image */}
           <input
             type="text"
             name="image"
@@ -118,6 +144,7 @@ const EditEventForm = () => {
             required
           />
 
+          {/* Date & Seats */}
           <div className="grid grid-cols-2 gap-3">
             <input
               type="date"
@@ -139,6 +166,7 @@ const EditEventForm = () => {
             />
           </div>
 
+          {/* Location & Category */}
           <div className="grid grid-cols-2 gap-3">
             <input
               type="text"
@@ -166,6 +194,7 @@ const EditEventForm = () => {
             </select>
           </div>
 
+          {/* Speakers */}
           <div>
             <label className="block text-gray-700 mb-2 font-medium">
               Speakers
@@ -178,15 +207,18 @@ const EditEventForm = () => {
                 >
                   <input
                     type="checkbox"
-                    checked={formData.speakers.includes(speaker)}
+                    checked={formData.speakers.some(
+                      (s) => s._id === speaker._id
+                    )}
                     onChange={() => toggleSpeaker(speaker)}
                   />
-                  <span>{speaker}</span>
+                  <span>{speaker.name}</span>
                 </label>
               ))}
             </div>
           </div>
 
+          {/* Sponsor */}
           <select
             name="sponsor"
             value={formData.sponsor}
@@ -201,6 +233,7 @@ const EditEventForm = () => {
             ))}
           </select>
 
+          {/* Submit */}
           <button
             type="submit"
             className="bg-[#ce1446] text-white px-6 py-2 rounded-lg shadow hover:bg-[#a01034] transition"
