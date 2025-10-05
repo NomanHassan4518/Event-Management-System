@@ -65,8 +65,11 @@ const EditEventForm = () => {
 
     try {
       setLoading(true);
-      await axios.put(`https://event-management-system-z1ji.vercel.app/api/event/${event._id}`, formData);
-      toast.succes("Event edit successfully!");
+      await axios.put(
+        `https://event-management-system-z1ji.vercel.app/api/event/${event._id}`,
+        formData
+      );
+      toast.success("Event edit successfully!");
       navigate("/events");
     } catch (error) {
       console.error("Error updating event:", error);
@@ -77,10 +80,9 @@ const EditEventForm = () => {
   };
 
   return (
-    <div className="pb-12">
-      {/* Header */}
+    <div className="mt-5 px-4 sm:px-8 md:px-12 pb-12">
       <div
-        className="relative w-full h-[300px] flex items-end"
+        className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] flex items-end"
         style={{
           backgroundImage: `url("https://demo.egenslab.com/html/eventlab/assets/images/backgrounds/breadcrumb-bg.png")`,
           backgroundPosition: "center",
@@ -89,12 +91,12 @@ const EditEventForm = () => {
         }}
       >
         <div className="absolute inset-0 bg-[#2a333b] bg-opacity-90"></div>
-        <div className="relative z-10 text-white px-12 md:px-20 pb-10 w-full flex justify-between items-end">
+        <div className="relative z-10 text-white px-4 sm:px-8 md:px-20 pb-6 sm:pb-8 md:pb-10 w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold font-alice">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-alice">
               Edit Event
             </h1>
-            <div className="flex items-center gap-3 text-sm mt-3 text-gray-200">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm mt-2 text-gray-200">
               <Link to="/" className="hover:text-[#ce1446] transition">
                 Home
               </Link>
@@ -105,13 +107,11 @@ const EditEventForm = () => {
         </div>
       </div>
 
-      {/* Form */}
       <div className="mt-5 px-12">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Edit Event
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Title */}
           <input
             type="text"
             name="title"
@@ -122,7 +122,6 @@ const EditEventForm = () => {
             required
           />
 
-          {/* Description */}
           <textarea
             name="desc"
             value={formData.desc}
@@ -133,7 +132,6 @@ const EditEventForm = () => {
             required
           />
 
-          {/* Image */}
           <input
             type="text"
             name="image"
@@ -144,8 +142,7 @@ const EditEventForm = () => {
             required
           />
 
-          {/* Date & Seats */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               type="date"
               name="date"
@@ -154,7 +151,6 @@ const EditEventForm = () => {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ce1446] outline-none"
               required
             />
-
             <input
               type="number"
               name="seats"
@@ -166,8 +162,7 @@ const EditEventForm = () => {
             />
           </div>
 
-          {/* Location & Category */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               type="text"
               name="location"
@@ -177,7 +172,6 @@ const EditEventForm = () => {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ce1446] outline-none"
               required
             />
-
             <select
               name="category"
               value={formData.category}
@@ -194,31 +188,22 @@ const EditEventForm = () => {
             </select>
           </div>
 
-          {/* Speakers */}
-          <div>
-            <label className="block text-gray-700 mb-2 font-medium">
-              Speakers
-            </label>
-            <div className="flex flex-wrap gap-3">
-              {speakers.map((speaker, idx) => (
-                <label
-                  key={idx}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.speakers.some(
-                      (s) => s._id === speaker._id
-                    )}
-                    onChange={() => toggleSpeaker(speaker)}
-                  />
-                  <span>{speaker.name}</span>
-                </label>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-3">
+            {speakers?.map((speaker) => (
+              <label
+                key={speaker._id}
+                className="flex items-center gap-2 cursor-pointer text-sm"
+              >
+                <input
+                  type="checkbox"
+                  checked={formData.speakers.includes(speaker._id)}
+                  onChange={() => toggleSpeaker(speaker._id)}
+                />
+                <span>{speaker.name}</span>
+              </label>
+            ))}
           </div>
 
-          {/* Sponsor */}
           <select
             name="sponsor"
             value={formData.sponsor}
@@ -233,12 +218,11 @@ const EditEventForm = () => {
             ))}
           </select>
 
-          {/* Submit */}
           <button
             type="submit"
-            className="bg-[#ce1446] text-white px-6 py-2 rounded-lg shadow hover:bg-[#a01034] transition"
+            className="bg-[#ce1446] text-white px-6 py-2 rounded-lg shadow hover:bg-[#a01034] transition w-full sm:w-auto"
           >
-            Update Event
+            Update Event{" "}
           </button>
         </form>
       </div>

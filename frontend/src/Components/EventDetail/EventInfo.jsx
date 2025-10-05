@@ -10,9 +10,9 @@ import { MdEventNote } from "react-icons/md";
 const EventInfo = ({ event }) => {
   return (
     <div className="">
-      <div>
+      <div className="w-full">
         <img
-          className="w-full h-[400px] object-cover rounded-t-lg"
+          className="w-full h-auto md:h-[400px] object-cover rounded-t-lg"
           src={event.image}
           alt={event.title || "Event"}
         />
@@ -21,7 +21,7 @@ const EventInfo = ({ event }) => {
       <div className="flex items-center justify-between  text-sm px-6 py-4 border-b text-[#2d373c] font-semibold">
         <div className="flex items-center gap-2">
           <AiOutlineCalendar className=" text-lg" />
-           <span>
+          <span>
             {new Date(event.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -58,7 +58,9 @@ const EventInfo = ({ event }) => {
           </div>
           <div>
             <p className="font-semibold text-gray-800">Speaker</p>
-            <span className="text-gray-500 text-xs">{event.speakers.length} Best Speaker</span>
+            <span className="text-gray-500 text-xs">
+              {event.speakers.length} Best Speaker
+            </span>
           </div>
         </div>
 

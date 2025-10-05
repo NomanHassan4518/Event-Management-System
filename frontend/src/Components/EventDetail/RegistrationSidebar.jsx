@@ -22,17 +22,20 @@ const RegistrationSidebar = ({ eventId }) => {
 
     try {
       const payload = {
-        userId: user?.id, 
-        eventId: eventId,  
+        userId: user?.id,
+        eventId: eventId,
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        seatsBooked: Number(formData.seatsBooked), 
+        seatsBooked: Number(formData.seatsBooked),
       };
 
       console.log("Submitting:", payload);
 
-      await axios.post("https://event-management-system-z1ji.vercel.app/api/registration", payload);
+      await axios.post(
+        "https://event-management-system-z1ji.vercel.app/api/registration",
+        payload
+      );
       toast.success("Event booked successfully");
     } catch (error) {
       console.error(error);
