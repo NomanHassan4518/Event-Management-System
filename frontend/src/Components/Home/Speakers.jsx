@@ -9,7 +9,7 @@ const responsive = {
 };
 
 const Speakers = () => {
-  const speakers = JSON.parse(localStorage.getItem("speakers"))
+  const speakers = JSON.parse(localStorage.getItem("speakers")) || []
   const items = speakers.map((speaker) => (
     <div key={speaker.id} className="!mx-3">
       <img
