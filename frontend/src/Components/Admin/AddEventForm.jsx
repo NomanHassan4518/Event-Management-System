@@ -80,7 +80,7 @@ const AddEventForm = () => {
   };
 
   return (
-<div className="mt-5 px-4 sm:px-8 md:px-12 pb-12">
+<div className=" pb-12">
      <div
   className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] flex items-end"
   style={{

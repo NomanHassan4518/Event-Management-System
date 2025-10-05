@@ -55,7 +55,7 @@ const RegistrationSidebar = ({ eventId }) => {
       <div className="bg-white">
         <div className="flex items-center gap-2 mb-4 bg-[#ce1446] text-white py-3 px-4 font-alice">
           <FaBookmark className="text-xl" />
-          <h4 className="font-bold text-2xl">Book This Event</h4>
+          <h4 className="font-bold md:text-2xl text-xl">Book This Event</h4>
         </div>
 
         <form className="space-y-4 px-4" onSubmit={handleSubmit}>

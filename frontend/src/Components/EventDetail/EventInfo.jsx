@@ -18,7 +18,7 @@ const EventInfo = ({ event }) => {
         />
       </div>
 
-      <div className="flex items-center justify-between  text-sm px-6 py-4 border-b text-[#2d373c] font-semibold">
+      <div className="grid md:grid-cols-3 grid-cols-1 md:space-y-0 space-y-4  text-sm px-6 py-4 border-b text-[#2d373c] font-semibold">
         <div className="flex items-center gap-2">
           <AiOutlineCalendar className=" text-lg" />
           <span>
@@ -39,8 +39,8 @@ const EventInfo = ({ event }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 w-full py-4 border-b text-sm">
-        <div className="flex items-center gap-3 px-4 ">
+      <div className="grid md:grid-cols-3 grid-cols-1  gap-3 w-full py-4 border-b text-sm">
+        <div className="flex items-center gap-3 px-4 md:border-none border-b md:pb-0 pb-4">
           <div className="bg-[#fff0f4] p-3 rounded-full">
             <MdEventNote className="text-[#ce1446] text-xl" />
           </div>
@@ -52,7 +52,7 @@ const EventInfo = ({ event }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 px-4 ">
+        <div className="flex items-center gap-3 px-4 md:border-none border-b md:pb-0 pb-4">
           <div className="bg-[#fff0f4] p-3 rounded-full">
             <IoMicOutline className="text-[#ce1446] text-xl" />
           </div>

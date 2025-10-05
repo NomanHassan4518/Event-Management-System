@@ -40,7 +40,7 @@ const EditEventForm = () => {
         seats: event.seats || "",
         location: event.location || "",
         category: event.category || "",
-        speakers: event.speakers || [],
+        speakers: event.speakers?.map((s) => (typeof s === "object" ? s._id : s)) || [],
         sponsor: event.sponsor || "",
       });
     }
@@ -51,14 +51,15 @@ const EditEventForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const toggleSpeaker = (speaker) => {
-    setFormData((prev) => ({
-      ...prev,
-      speakers: prev.speakers.find((s) => s._id === speaker._id)
-        ? prev.speakers.filter((s) => s._id !== speaker._id)
-        : [...prev.speakers, speaker],
-    }));
-  };
+  const toggleSpeaker = (speakerId) => {
+  setFormData((prev) => ({
+    ...prev,
+    speakers: prev.speakers.includes(speakerId)
+      ? prev.speakers.filter((id) => id !== speakerId)
+      : [...prev.speakers, speakerId],
+  }));
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +81,7 @@ const EditEventForm = () => {
   };
 
   return (
-    <div className="mt-5 px-4 sm:px-8 md:px-12 pb-12">
+    <div className=" pb-12">
       <div
         className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] flex items-end"
         style={{
@@ -189,20 +190,21 @@ const EditEventForm = () => {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            {speakers?.map((speaker) => (
-              <label
-                key={speaker._id}
-                className="flex items-center gap-2 cursor-pointer text-sm"
-              >
-                <input
-                  type="checkbox"
-                  checked={formData.speakers.includes(speaker._id)}
-                  onChange={() => toggleSpeaker(speaker._id)}
-                />
-                <span>{speaker.name}</span>
-              </label>
-            ))}
-          </div>
+  {speakers?.map((speaker) => (
+    <label
+      key={speaker._id}
+      className="flex items-center gap-2 cursor-pointer text-sm"
+    >
+      <input
+        type="checkbox"
+        checked={formData.speakers.includes(speaker._id)}
+        onChange={() => toggleSpeaker(speaker._id)}
+      />
+      <span>{speaker.name}</span>
+    </label>
+  ))}
+</div>
+
 
           <select
             name="sponsor"
